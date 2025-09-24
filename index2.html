@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+
+  <!-- Progress Bar -->
+<div class="progressbar">
+  <div class="progress"></div>
+  <div class="step active">1</div>
+  <div class="step">2</div>
+  <div class="step">3</div>
+  <div class="step">4</div>
+</div>
+<button onclick="nextStep()">Next Step</button>
+
+<style>
+/* Progress Bar */
+.progressbar {
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+  margin-bottom: 2rem;
+}
+
+.progressbar::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: #d1d5db;
+  transform: translateY(-50%);
+  z-index: 0;
+  border-radius: 4px;
+}
+
+.progress {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  height: 4px;
+  background: linear-gradient(135deg, #4f46e5, #9333ea);
+  transform: translateY(-50%);
+  width: 0%;
+  border-radius: 4px;
+  transition: width 0.6s ease;
+  z-index: 0;
+}
+
+.step {
+  width: 40px;
+  height: 40px;
+  background: #d1d5db;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1;
+  font-weight: 600;
+  color: #fff;
+  transition: background 0.4s ease, transform 0.3s ease;
+}
+
+.step.active {
+  background: linear-gradient(135deg, #4f46e5, #9333ea);
+  transform: scale(1.1);
+  box-shadow: 0 0 12px rgba(79, 70, 229, 0.5);
+}
+</style>
+
+<script>
+const progressSteps = document.querySelectorAll(".step");
+const progressBar = document.querySelector(".progress");
+
+let formStep = 0;
+
+function updateForm() {
+  progressSteps.forEach((step, i) => step.classList.toggle("active", i === formStep));
+
+  progressSteps.forEach((s, i) => {
+    s.classList.toggle("active", i <= formStep);
+  });
+
+  const progressPercent = (formStep / (progressSteps.length - 1)) * 100;
+  progressBar.style.width = progressPercent + "%";
+}
+
+function nextStep() {
+  formStep++;
+  if (formStep >= progressSteps.length) formStep = progressSteps.length - 1;
+  updateForm();
+}
+
+// Initial setup
+updateForm();
+</script>
+  
+</body>
+</html>

@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Progress bar snippet by mehedi</title>
+
+     <style>
+.progress-wrapper {
+    margin: 20px 18px;
+    padding: 15px 25px;
+    border-radius: 10px;
+    background: #f9f9f9;
+    text-align: center;
+    position: relative;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 12px;
+  background: #eee;
+  border-radius: 6px;
+  overflow: visible; /* allow points to be outside the bar */
+  margin: 10px 0;
+  position: relative;
+}
+
+
+.progress-fill {
+  height: 100%;
+  background: #FCB118;
+  width: 0;
+  transition: width 0.4s ease;
+}
+
+.progress-text {
+  font-size: 14px;
+  font-weight: bold;
+  color: #333;
+  margin-top: 5px;
+}
+
+
+.progress-point {
+    top: -3px;
+    position: absolute;
+    bottom: 100%;
+    width: 18px;
+    height: 18px;
+    background: #d1d5db;
+    border-radius: 50%;
+    transform: translateX(-50%);
+    margin-bottom: 6px;
+    transition: background 0.4s ease, transform 0.3s ease;
+}
+.progress-point.active {
+  background: #FCB118;
+  transform: translateX(-50%) scale(1.2);
+}
+
+
+</style>
+</head>
+<body>
+   
+
+<div class="progress-wrapper">
+  <div class="progress-bar">
+    <div class="progress-fill" id="progress-fill"></div>
+    <!-- Milestone points -->
+    <div class="progress-point" style="left: 0%"></div>
+    <div class="progress-point" style="left: 25%"></div>
+    <div class="progress-point" style="left: 50%"></div>
+    <div class="progress-point" style="left: 75%"></div>
+    <div class="progress-point" style="left: 100%"></div>
+  </div>
+  <div class="progress-text" id="progress-text">Started Your Journey 🚀</div>
+</div>
+
+
+{% comment %} <script>
+  function updateProgressBar(subtotal) {
+    const goal = 100; // set your target subtotal (£/$)
+    let progress = Math.min((subtotal / goal) * 100, 100);
+
+    // Update bar width
+    document.getElementById("progress-fill").style.width = progress + "%";
+
+    // Update text
+    let text = "Start Your Journey 🚀";
+    if (progress >= 25 && progress < 50) {
+      text = "Halfway to Your Dream Body ✨";
+    } else if (progress >= 50 && progress < 100) {
+      text = "Almost There Babe 💖";
+    } else if (progress >= 100) {
+      text = "Transformation Unlocked! 🔥";
+    }
+    document.getElementById("progress-text").innerText = text;
+  }
+
+  // Fetch cart data from Shopify
+  function refreshProgress() {
+    fetch("/cart.js")
+      .then((resp) => resp.json())
+      .then((data) => {
+        updateProgressBar(data.total_price / 100); // convert cents to currency
+      });
+  }
+
+  // Run on page load
+  document.addEventListener("DOMContentLoaded", refreshProgress);
+
+  // --- EVENTS ---
+
+  // Quantity buttons (+/-)
+  document.addEventListener("click", function (e) {
+    if (e.target.closest(".m-quantity__button")) {
+      setTimeout(refreshProgress, 500);
+    }
+  });
+
+  // Manual quantity input
+  document.addEventListener("change", function (e) {
+    if (e.target.matches(".m-quantity__input")) {
+      setTimeout(refreshProgress, 500);
+    }
+  });
+
+  // Add to cart form
+  document.addEventListener("submit", function (e) {
+    if (e.target.closest("form[action^='/cart/add']")) {
+      setTimeout(refreshProgress, 800);
+    }
+  });
+
+  // Add to cart buttons (AJAX / quick add)
+  document.addEventListener("click", function (e) {
+    if (e.target.closest(".add-to-cart, [name='add'], .quick-add")) {
+      setTimeout(refreshProgress, 800);
+    }
+  });
+
+  // ✅ Remove from cart button
+  document.addEventListener("click", function (e) {
+    if (e.target.closest("m-cart-remove-button, .m-cart-item__remove")) {
+      setTimeout(refreshProgress, 800);
+    }
+  });
+</script> {% endcomment %}
+
+<script>
+    function updateProgressBar(subtotal) {
+  const goal = 100;
+  let progress = Math.min((subtotal / goal) * 100, 100);
+
+  // Update bar width
+  document.getElementById("progress-fill").style.width = progress + "%";
+
+  // Update text
+  let text = "Start Your Journey 🚀";
+  if (progress >= 25 && progress < 50) {
+    text = "Halfway to Your Dream Body ✨";
+  } else if (progress >= 50 && progress < 100) {
+    text = "Almost There Babe 💖";
+  } else if (progress >= 100) {
+    text = "Transformation Unlocked! 🔥";
+  }
+  document.getElementById("progress-text").innerText = text;
+
+  // Activate milestone points
+  document.querySelectorAll(".progress-point").forEach((point) => {
+    const pointLeft = parseInt(point.style.left);
+    point.classList.toggle("active", progress >= pointLeft);
+  });
+}
+
+// Fetch cart data from Shopify
+function refreshProgress() {
+  fetch("/cart.js")
+    .then((resp) => resp.json())
+    .then((data) => {
+      updateProgressBar(data.total_price / 100);
+    });
+}
+
+// Run on page load
+document.addEventListener("DOMContentLoaded", refreshProgress);
+
+// --- EVENTS (same as your existing code) ---
+document.addEventListener("click", function (e) {
+  if (e.target.closest(".m-quantity__button")) setTimeout(refreshProgress, 500);
+});
+
+document.addEventListener("change", function (e) {
+  if (e.target.matches(".m-quantity__input")) setTimeout(refreshProgress, 500);
+});
+
+document.addEventListener("submit", function (e) {
+  if (e.target.closest("form[action^='/cart/add']")) setTimeout(refreshProgress, 800);
+});
+
+document.addEventListener("click", function (e) {
+  if (e.target.closest(".add-to-cart, [name='add'], .quick-add")) setTimeout(refreshProgress, 800);
+});
+
+document.addEventListener("click", function (e) {
+  if (e.target.closest("m-cart-remove-button, .m-cart-item__remove")) setTimeout(refreshProgress, 800);
+});
+
+</script>
+</body>
+</html>

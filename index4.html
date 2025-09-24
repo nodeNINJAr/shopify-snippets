@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body {
+    margin: 0;
+    font-family: monospace;
+}
+.slider{
+    width: 1300px;
+    max-width: 100vw;
+    height: 700px;
+    margin: auto;
+    position: relative;
+    overflow: hidden;
+}
+.list {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    display: flex;
+    width: max-content;
+    transition: 1s;
+}
+.list img{
+    width: 1300px;
+    max-width: 100vw;
+    height: 100%;
+    object-fit: cover;
+}
+.buttons{
+    position: absolute;
+    top: 45%;
+    left: 5%;
+    width: 90%;
+    display: flex;
+    justify-content: space-between;
+}
+.buttons button {
+    width: 50px;
+    height: 50px;
+    border-radius: 505;
+    background-color: #fff5;
+    color: #fff;
+    border: none;
+    font-family: monospace;
+    font-weight: bold;
+}
+.dots{
+    position: absolute;
+    bottom: 10px;
+    color: #fff;
+    left: 0;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    transition: 1s;
+}
+.dots li {
+    list-style: none;
+    width: 10px;
+    height: 10px;
+    background-color: #fff;
+    margin: 20px;
+    border-radius: 20px;
+}
+.dots li.active {
+    width: 30px;
+}
+@media screen and ( max-width: 768px) { 
+    .slider {
+        height: 400px;
+    }
+    
+}
+    </style>
+</head>
+<body>
+    <div class="slider">
+        <div class="list">
+            <div class="item">
+                <img src="https://i.postimg.cc/7Zf4Tm2X/office1.jpg" alt="image1">
+            </div>
+            <div class="item">
+                <img src="https://i.postimg.cc/VNKjyMf7/office2.jpg" alt="image2">
+            </div>
+            <div class="item">
+                <img src="https://i.postimg.cc/cJBFvrsY/office3.jpg" alt="image3">
+            </div>
+            <div class="item">
+                <img src="https://i.postimg.cc/Bvf1dpfc/office4.jpg" alt="image4">
+            </div>
+            <div class="item">
+                <img src="https://i.postimg.cc/bJJYMSr9/office5.jpg" alt="image5">
+            </div>
+        </div>
+        <!--button prev and next-->
+        <div class="buttons">
+            <button id="prev"><</button>
+        <button id="next">></button>
+        </div>
+        <!--Dots (if 5 items => 5 dots)-->
+        <ul class="dots">
+           <li class="active"></li>
+           <li></li>
+           <li></li>
+           <li></li>
+           <li></li> 
+        </ul>
+    </div>
+    <script>
+
+        let list = document.querySelector('.slider .list');
+let items = document.querySelectorAll('.slider .list .item');
+let dots = document.querySelectorAll('.slider .dots li');
+let prev = document.getElementById('prev');
+let next = document.getElementById('next');
+
+let active = 0;
+let lengthitems = items.length - 1;
+
+next.onclick = function() {
+    if (active + 1 > lengthitems) {
+        active = 0;
+    } else {
+        active = active + 1;
+    }
+    reloadslider();
+}
+
+prev.onclick = function() {
+    if (active - 1 < 0) {
+        active = lengthitems;
+    } else {
+        active = active - 1;
+    }
+    reloadslider();
+}
+
+let autoslide = setInterval(() => { next.click(); }, 3000);
+
+function reloadslider() {
+    let checkleft = items[active].offsetLeft;
+    list.style.left = -checkleft + 'px';
+
+    let lastactiveDot = document.querySelector('.slider .dots li.active');
+    if (lastactiveDot) lastactiveDot.classList.remove('active');
+    dots[active].classList.add('active');
+}
+
+dots.forEach((li, key) => {
+    li.addEventListener('click', function() {
+        active = key;
+        reloadslider();
+    })
+})
+    </script>
+</body>
+</html>
