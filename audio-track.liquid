@@ -1,0 +1,60 @@
+
+
+///this and snippints
+{% if block.settings.audio_link %}
+  <audio id="audio-{{ block.id }}" 
+         src="{{ block.settings.audio_link }}" 
+         controls 
+         {% if block.settings.autoplay %}data-autoplay="true"{% endif %}>
+  </audio>
+{% endif %}
+
+
+<script>
+   document.addEventListener('DOMContentLoaded', function() {
+  const audioElements = document.querySelectorAll('audio');
+
+  audioElements.forEach(audio => {
+    if (audio.hasAttribute('data-autoplay') || audio.dataset.autoplay === "true") {
+      // Try to play
+      audio.play().catch(() => {
+        // Autoplay blocked, wait for user interaction
+        const playOnClick = () => {
+          audio.play();
+          document.removeEventListener('click', playOnClick);
+        };
+        document.addEventListener('click', playOnClick);
+      });
+    }
+  });
+});
+</script>
+
+////this json need to place on parents json file
+
+{
+  "type": "audio",
+  "name": "Audio Track",
+  "limit": 1,
+  "settings": [
+    {
+      "type": "text",
+      "id": "audio_link",
+      "label": "Audio URL",
+      "default": "https://example.com/audio.mp3",
+      "placeholder": "https://example.com/audio.mp3"
+    },
+    {
+      "type": "checkbox",
+      "id": "autoplay",
+      "label": "Enable autoplay",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Audio Title (optional)",
+      "default": "My Audio Track"
+    }
+  ]
+}
